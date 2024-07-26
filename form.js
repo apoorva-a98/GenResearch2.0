@@ -31,7 +31,7 @@ console.log(projectTitleFolder);
 let projectTitleEntry = document.createElement("input");
 projectTitleEntry.placeholder = "Enter a Project Name";
 let projectTitleButton = document.createElement("button");
-projectTitleButton.textContent = "Save";
+projectTitleButton.textContent = "Load Form";
 projectTitleButton.style.backgroundColor = "white";
 projectTitleButton.style.color = "black"; 
 projectTitleButton.style.borderStyle = "solid"; 
@@ -54,22 +54,15 @@ projectTitleButton.addEventListener('click', () => {
 
 function init() {
     console.log("init");
-    let assumptionField = document.createElement('div');
-    assumptionField.style.position = "absolute";
-    assumptionField.style.left = window.innerWidth - 50 + "px";
-    assumptionField.style.top = 50 + "px";
-    assumptionField.style.width = "50px";
-    assumptionField.style.height = "20px";
-
 
     let textContainerDiv = document.createElement('div');
     textContainerDiv.id = "textContainerDiv";
     document.body.append(textContainerDiv);
 
-    subscribeToPosts()
+    subscribeToForm()
 }
 
-function subscribeToPosts() {
+function subscribeToForm() {
 
     onChildAdded(assumptionInDB, (data) => {
         console.log("added", data.key, data.val());
@@ -81,15 +74,15 @@ function subscribeToPosts() {
         addTextfield(data.key, data.val());
     });
 
-    onChildChanged(assumptionInDB, (data) => {
-        const element = document.getElementById(data.key);
-        element.innerHTML = data.val().username + ": " + data.val().text;
-        console.log("changed", data.key, data.val(), element);
-    });
+    // onChildChanged(assumptionInDB, (data) => {
+    //     const element = document.getElementById(data.key);
+    //     element.innerHTML = data.val().username + ": " + data.val().text;
+    //     console.log("changed", data.key, data.val(), element);
+    // });
 
-    onChildRemoved(assumptionInDB, (data) => {
-        console.log("removed", data.key, data.val());
-    });
+    // onChildRemoved(assumptionInDB, (data) => {
+    //     console.log("removed", data.key, data.val());
+    // });
 
 }
 
@@ -98,11 +91,14 @@ function addTextfield(key, data) {
     if (changedDiv) {
         changedDiv.innerHTML = data;
     } else {
-        let div = document.createElement('input');
-        div.id = key; //syncing the id with the key in the database
-        div.setAttribute("contenteditable", true);
-        div.value = data;
-        textContainerDiv.append(div);
+        let formInput = document.createElement('textarea');
+        formInput.id = key; //syncing the id with the key in the database
+        formInput.setAttribute("contenteditable", true);
+        formInput.value = data;
+        formInput.style.overflow = "auto"; // Make the textarea resizable
+        formInput.style.width = "75ch"; // maximum width
+        formInput.style.minHeight = "40px"; // minimum height
+        textContainerDiv.append(formInput);
     }
 }
 
