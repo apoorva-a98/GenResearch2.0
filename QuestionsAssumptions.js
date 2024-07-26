@@ -7,7 +7,7 @@ const textDiv = document.getElementById("resulting_text");
 const waitingDiv = document.getElementById("waiting_text");
 
 //waiting for response from input field
-async function askForWords(p_prompt, ParentDiv) {
+async function askForWords(p_prompt) {
     document.body.style.cursor = "progress";
     waitingDiv.innerHTML = "Waiting for reply from Replicate...";
 
@@ -16,10 +16,10 @@ async function askForWords(p_prompt, ParentDiv) {
         console.log("question:", p_prompt);
         let newAssumption = await generateAssumptions(p_prompt);
         console.log("newAssumption", newAssumption[0]);
-        await generateQuestions(newAssumption[0], ParentDiv);
+        await generateQuestions(newAssumption[0]);
     } else {
         console.log("assumption:", p_prompt);
-        await generateQuestions(p_prompt, ParentDiv);
+        await generateQuestions(p_prompt);
     }
 }
 
@@ -36,11 +36,13 @@ async function generateAssumptions(p_prompt) {
     multipleAssumptions.push(furtherPrompt.output.join(""))
     console.log("multipleAssumptions", multipleAssumptions);
 
-    waitingDiv.innerHTML = "Suggested Questions:";
+    // textDiv.innerHTML = multipleAssumptions;
+    // waitingDiv.innerHTML = "Suggested Questions:";
+    // changeToInputField();
     return multipleAssumptions;
 }
 
-async function generateQuestions(p_prompt, ParentDiv) {
+async function generateQuestions(p_prompt) {
     console.log("Entered generateQuestions");
     const sentences = p_prompt.match(/[^.!]+[.!]+/g);
     let questions = [];
@@ -53,12 +55,18 @@ async function generateQuestions(p_prompt, ParentDiv) {
 
     for (let i = 0; i < questions.length; i++) {
         console.log("question:", questions[i]);
-        createInputBoxWithQuestion(questions[i], ParentDiv);   // Create new input box and buttons
+        // let words_response = questions[i];
+        // textDiv.innerHTML = words_response;
+        // waitingDiv.innerHTML = "Suggested Questions:";
+        // changeToInputField();
+        createInputBoxWithQuestion(questions[i]);
+        // Create new input box and buttons
     } 
     waitingDiv.innerHTML = "Suggested Questions:";
+    // return questions;
 }
 
-function createInputBoxWithQuestion(question, ParentDiv) {
+function createInputBoxWithQuestion(question) {
     // Create a new div element to contain the textarea and buttons
     const containerDiv = document.createElement("div");
     containerDiv.id = question;
@@ -73,9 +81,9 @@ function createInputBoxWithQuestion(question, ParentDiv) {
     const button1 = document.createElement("button");
     button1.textContent = "Generate Questions";
     button1.style.backgroundColor = "#1E1A26";
-    button1.addEventListener('click', function(e) {
-        let parentDiv = e.target.parentElement; // getting the parent element
-        askForWords(textareaElement.value, parentDiv);
+    button1.addEventListener('click', function() {
+        askForWords(textareaElement.value);
+        //add questions below the question generating
     })
 
     const button2 = document.createElement("button");
@@ -107,9 +115,8 @@ function createInputBoxWithQuestion(question, ParentDiv) {
     containerDiv.appendChild(lineBreak);
     containerDiv.appendChild(lineBreak);
 
-    // Append the container to the Parent Div
-    // textDiv.appendChild(containerDiv); 
-    ParentDiv.appendChild(containerDiv); // Appending to the parent elements
+    // Append the container to the textDiv
+    textDiv.appendChild(containerDiv);
 }
 
 

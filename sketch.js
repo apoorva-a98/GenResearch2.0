@@ -75,30 +75,30 @@ function init() {
     input_field.id = "input_prompt";
     input_field.placeholder = "Enter an Assumption";
     input_field.size = 100;
+        // Add buttons
+        let submitButton = document.createElement("button");
+        submitButton.textContent = "Generate Questions";
+        submitButton.style.backgroundColor = "#1E1A26";
+        submitButton.addEventListener("click", function () {
+            askForWords(input_field.value);
+            push(assumptionInDB, {"assumption":input_field.value});
+        
+        });
     
-    // Add buttons
-    let submitButton = document.createElement("button");
-    submitButton.textContent = "Generate Questions";
-    submitButton.style.backgroundColor = "#1E1A26";
-    submitButton.addEventListener("click", function (e) {
-        askForWords(input_field.value, e.target.parentElement); //attach to the parent element
-        push(assumptionInDB, input_field.value); 
-    });
+        let clearButton = document.createElement("button");
+        clearButton.textContent = "Clear";
+        clearButton.style.backgroundColor = "#593128";
+        clearButton.addEventListener("click", function () {
+            input_field.value = "";
+        });
 
-    let clearButton = document.createElement("button");
-    clearButton.textContent = "Clear";
-    clearButton.style.backgroundColor = "#593128";
-    clearButton.addEventListener("click", function () {
-        input_field.value = "";
-    });
-
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = "Delete";
-    deleteButton.style.backgroundColor = "#593128";
-    deleteButton.addEventListener('click', function() {
-        // text_container.remove(); 
-        //how to delete new assumption?
-    })
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.style.backgroundColor = "#593128";
+        deleteButton.addEventListener('click', function() {
+            // text_container.remove(); 
+            //how to delete new assumption?
+        })
 
         let addButton = document.createElement("button");
         addButton.textContent = "Add Assumption";
